@@ -1,0 +1,330 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard de Chamados</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="/chamados/cadastro" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-plus-circle me-1"></i>Novo Chamado
+            </a>
+            <a href="/chamados" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-list me-1"></i>Listar Chamados
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard de Chamados -->
+<div class="row mb-4">
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total</h5>
+                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.total : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-danger">
+            <div class="card-body text-center">
+                <h5 class="card-title">Abertos</h5>
+                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.abertos : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <h5 class="card-title">Em Andamento</h5>
+                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.emAndamento : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-dark bg-info">
+            <div class="card-body text-center">
+                <h5 class="card-title">Aguardando</h5>
+                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.aguardandoCliente : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h5 class="card-title">Resolvidos</h5>
+                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.resolvidos : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-secondary">
+            <div class="card-body text-center">
+                <h5 class="card-title">Cancelados</h5>
+                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.cancelados : 0 %></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chamados recentes -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Chamados Recentes</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Data</th>
+                                <th>Cliente</th>
+                                <th>Condomínio</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof ultimosChamados !== 'undefined' && ultimosChamados && ultimosChamados.length > 0) { %>
+                                <% ultimosChamados.forEach(chamado => { %>
+                                    <tr>
+                                        <td><%= chamado.id %></td>
+                                        <td><%= chamado.data_abertura.toLocaleDateString('pt-BR') %></td>
+                                        <td><%= chamado.cliente_chamado.nome %></td>
+                                        <td><%= chamado.cliente_chamado.condominio_cliente.nome %></td>
+                                        <td><%= chamado.tipo %></td>
+                                        <td>
+                                            <% if (chamado.status === 'Aberto') { %>
+                                                <span class="badge bg-danger">Aberto</span>
+                                            <% } else if (chamado.status === 'Em Andamento') { %>
+                                                <span class="badge bg-warning text-dark">Em Andamento</span>
+                                            <% } else if (chamado.status === 'Aguardando Cliente') { %>
+                                                <span class="badge bg-info text-dark">Aguardando Cliente</span>
+                                            <% } else if (chamado.status === 'Resolvido') { %>
+                                                <span class="badge bg-success">Resolvido</span>
+                                            <% } else { %>
+                                                <span class="badge bg-secondary">Cancelado</span>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <a href="/chamados/visualizar/<%= chamado.id %>" class="btn btn-sm btn-outline-info">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="7" class="text-center">Nenhum chamado encontrado</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard de Condomínios - exibido apenas para administradores -->
+<% if (usuario && usuario.nivel === 'Admin') { %>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 border-bottom">
+    <h2 class="h3">Dashboard de Condomínios</h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="/condominios/cadastro" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-plus-circle me-1"></i>Novo Condomínio
+            </a>
+            <a href="/condominios" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-list me-1"></i>Listar Condomínios
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total</h5>
+                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.total : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h5 class="card-title">Ativos</h5>
+                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.ativos : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-dark bg-warning">
+            <div class="card-body text-center">
+                <h5 class="card-title">Prospecto</h5>
+                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.prospectos : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <h5 class="card-title">Implementação</h5>
+                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.implementacao : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h5 class="card-title">Abre Portas</h5>
+                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.abrePortas : 0 %></h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 mb-4">
+        <div class="card text-white bg-secondary">
+            <div class="card-body text-center">
+                <h5 class="card-title">Agendado</h5>
+                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.agendados : 0 %></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Condomínios recentes -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Condomínios Recentes</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Status</th>
+                                <th>Cidade</th>
+                                <th>Síndico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof recentesCondominios !== 'undefined' && recentesCondominios && recentesCondominios.length > 0) { %>
+                                <% recentesCondominios.forEach(condominio => { %>
+                                    <tr>
+                                        <td><%= condominio.nome %></td>
+                                        <td>
+                                            <% if (condominio.status === 'Ativo') { %>
+                                                <span class="badge bg-success">Ativo</span>
+                                            <% } else if (condominio.status === 'Prospecto') { %>
+                                                <span class="badge bg-warning text-dark">Prospecto</span>
+                                            <% } else if (condominio.status === 'Implementação') { %>
+                                                <span class="badge bg-info text-dark">Implementação</span>
+                                            <% } else if (condominio.status === 'Abre Portas') { %>
+                                                <span class="badge bg-primary">Abre Portas</span>
+                                            <% } else if (condominio.status === 'Agendado Visita') { %>
+                                                <span class="badge bg-secondary">Agendado Visita</span>
+                                            <% } else { %>
+                                                <span class="badge bg-danger">Inativo</span>
+                                            <% } %>
+                                        </td>
+                                        <td><%= condominio.cidade %></td>
+                                        <td><%= condominio.sindico %></td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="text-center">Nenhum condomínio cadastrado</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Distribuição por Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="chart-container" style="position: relative; height:200px; width:100%">
+                    <canvas id="condominiosChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<!-- Script para o gráfico de condomínios -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        <% if (usuario && usuario.nivel === 'Admin' && typeof estatisticasCondominios !== 'undefined') { %>
+        try {
+            // Serialização segura dos dados para o JavaScript
+            const estatisticasCondominios = JSON.parse('<%= JSON.stringify(estatisticasCondominios || {}) %>'.replace(/&quot;/g, '"'));
+            
+            // Agora podemos acessar as propriedades com segurança
+            const condominioPorStatus = {
+                ativos: estatisticasCondominios.ativos || 0,
+                inativos: estatisticasCondominios.inativos || 0,
+                prospectos: estatisticasCondominios.prospectos || 0,
+                implementacao: estatisticasCondominios.implementacao || 0,
+                abrePortas: estatisticasCondominios.abrePortas || 0,
+                agendados: estatisticasCondominios.agendados || 0
+            };
+            
+            // Criar gráfico
+            const ctx = document.getElementById('condominiosChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Ativos', 'Inativos', 'Prospectos', 'Implementação', 'Abre Portas', 'Agendado Visita'],
+                    datasets: [{
+                        data: [
+                            condominioPorStatus.ativos,
+                            condominioPorStatus.inativos,
+                            condominioPorStatus.prospectos,
+                            condominioPorStatus.implementacao,
+                            condominioPorStatus.abrePortas,
+                            condominioPorStatus.agendados
+                        ],
+                        backgroundColor: [
+                            '#28a745', // verde - ativo
+                            '#dc3545', // vermelho - inativo
+                            '#ffc107', // amarelo - prospecto
+                            '#17a2b8', // azul claro - implementação
+                            '#007bff', // azul - abre portas
+                            '#6c757d'  // cinza - agendado
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        } catch (e) {
+            console.error('Erro ao inicializar o gráfico:', e);
+        }
+        <% } %>
+    });
+</script>

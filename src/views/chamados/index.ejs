@@ -1,0 +1,95 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Gerenciamento de Chamados</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="/chamados/cadastro" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-plus-circle me-1"></i>Novo Chamado
+            </a>
+            <a href="/chamados/dashboard" class="btn btn-sm btn-outline-info">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Lista de Chamados</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Condomínio</th>
+                        <th>Tipo</th>
+                        <th>Prioridade</th>
+                        <th>Status</th>
+                        <th>Técnico</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (chamados && chamados.length > 0) { %>
+                        <% chamados.forEach(chamado => { %>
+                            <tr>
+                                <td><%= chamado.id %></td>
+                                <td><%= chamado.data_abertura.toLocaleDateString('pt-BR') %></td>
+                                <td><%= chamado.cliente_chamado.nome %></td>
+                                <td><%= chamado.cliente_chamado.condominio_cliente.nome %>
+                                </td><td><%= chamado.tipo %></td>
+                                <td>
+                                    <% if (chamado.prioridade === 'Urgente') { %>
+                                        <span class="badge bg-danger">Urgente</span>
+                                    <% } else if (chamado.prioridade === 'Alta') { %>
+                                        <span class="badge bg-warning text-dark">Alta</span>
+                                    <% } else if (chamado.prioridade === 'Média') { %>
+                                        <span class="badge bg-info text-dark">Média</span>
+                                    <% } else { %>
+                                        <span class="badge bg-success">Baixa</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (chamado.status === 'Aberto') { %>
+                                        <span class="badge bg-danger">Aberto</span>
+                                    <% } else if (chamado.status === 'Em Andamento') { %>
+                                        <span class="badge bg-warning text-dark">Em Andamento</span>
+                                    <% } else if (chamado.status === 'Aguardando Cliente') { %>
+                                        <span class="badge bg-info text-dark">Aguardando Cliente</span>
+                                    <% } else if (chamado.status === 'Resolvido') { %>
+                                        <span class="badge bg-success">Resolvido</span>
+                                    <% } else { %>
+                                        <span class="badge bg-secondary">Cancelado</span>
+                                    <% } %>
+                                </td>
+                                <td><%= chamado.tecnico_responsavel || '-' %></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/chamados/editar/<%= chamado.id %>" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="/chamados/excluir/<%= chamado.id %>" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                        <a href="/chamados/visualizar/<%= chamado.id %>" class="btn btn-sm btn-outline-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="9" class="text-center">Nenhum chamado encontrado</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

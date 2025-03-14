@@ -1,0 +1,152 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Abrir Novo Chamado</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="/chamados" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Informações do Chamado</h5>
+    </div>
+    <div class="card-body">
+        <form action="/chamados/cadastrar" method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="condominio_id" class="form-label">Condomínio*</label>
+                    <select class="form-select" id="condominio_id" name="condominio_id" required>
+                        <option value="">Selecione um condomínio</option>
+                        <% if (condominios && condominios.length > 0) { %>
+                            <% condominios.forEach(condominio => { %>
+                                <option value="<%= condominio.id %>"><%= condominio.nome %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="cliente_id" class="form-label">Cliente*</label>
+                    <select class="form-select" id="cliente_id" name="cliente_id" required disabled>
+                        <option value="">Selecione primeiro o condomínio</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="tipo" class="form-label">Tipo de Problema*</label>
+                    <select class="form-select" id="tipo" name="tipo" required>
+                        <option value="">Selecione</option>
+                        <option value="Internet Lenta">Internet Lenta</option>
+                        <option value="Sem Conexão">Sem Conexão</option>
+                        <option value="Instabilidade">Instabilidade</option>
+                        <option value="Instalação">Instalação</option>
+                        <option value="Mudança de Endereço">Mudança de Endereço</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="prioridade" class="form-label">Prioridade*</label>
+                    <select class="form-select" id="prioridade" name="prioridade" required>
+                        <option value="Baixa">Baixa</option>
+                        <option value="Média" selected>Média</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Urgente">Urgente</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-12 mb-3">
+                    <label for="descricao" class="form-label">Descrição do Problema*</label>
+                    <textarea class="form-control" id="descricao" name="descricao" rows="5" required></textarea>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="reset" class="btn btn-outline-secondary">Limpar</button>
+                <button type="submit" class="btn btn-primary">Abrir Chamado</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Use esta sintaxe para maior compatibilidade
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obter o elemento condominio_id
+        var condominioSelect = document.getElementById('condominio_id');
+        var clienteSelect = document.getElementById('cliente_id');
+        
+        // Adicionar evento de mudança
+        condominioSelect.addEventListener('change', function() {
+            var condominioId = this.value;
+            if (condominioId) {
+                // Mostrar mensagem de carregamento
+                clienteSelect.innerHTML = '<option value="">Carregando clientes...</option>';
+                clienteSelect.disabled = true;
+                
+                // Fazer requisição AJAX
+                fetch(`/chamados/api/clientes/${condominioId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erro na resposta do servidor: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(clientes => {
+                        console.log('Clientes recebidos:', clientes);
+                        clienteSelect.innerHTML = '<option value="">Selecione um cliente</option>';
+                        
+                        if (clientes && clientes.length > 0) {
+                            clientes.forEach(cliente => {
+                                var option = document.createElement('option');
+                                option.value = cliente.id;
+                                option.textContent = `${cliente.nome} - Bloco ${cliente.bloco}, Apt ${cliente.apartamento}`;
+                                clienteSelect.appendChild(option);
+                            });
+                            clienteSelect.disabled = false;
+                        } else {
+                            clienteSelect.innerHTML = '<option value="">Nenhum cliente encontrado para este condomínio</option>';
+                            clienteSelect.disabled = true;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar clientes:', error);
+                        clienteSelect.innerHTML = '<option value="">Erro ao carregar clientes</option>';
+                        alert('Erro ao carregar clientes. Por favor, tente novamente.');
+                    });
+            } else {
+                clienteSelect.innerHTML = '<option value="">Selecione primeiro o condomínio</option>';
+                clienteSelect.disabled = true;
+            }
+        });
+        
+        // Verificar se há um cliente na URL (para pré-seleção)
+        var urlParams = new URLSearchParams(window.location.search);
+        var clienteId = urlParams.get('cliente');
+        
+        if (clienteId) {
+            // Fazer uma requisição para obter os dados do cliente incluindo o condomínio
+            fetch(`/clientes/por-condominio/${clienteId}`)
+                .then(response => response.json())
+                .then(cliente => {
+                    if (cliente && cliente.condominio_id) {
+                        // Selecionar o condomínio
+                        condominioSelect.value = cliente.condominio_id;
+                        
+                        // Disparar o evento change para carregar os clientes
+                        var event = new Event('change');
+                        condominioSelect.dispatchEvent(event);
+                        
+                        // Esperar um pouco para que os clientes sejam carregados
+                        setTimeout(function() {
+                            clienteSelect.value = clienteId;
+                        }, 500);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar dados do cliente:', error);
+                });
+        }
+    });
+</script>

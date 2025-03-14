@@ -1,0 +1,173 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Chamado #<%= chamado.id %></h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="/chamados" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Voltar
+            </a>
+            <a href="/chamados/editar/<%= chamado.id %>" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-edit me-1"></i>Editar
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Informações do Chamado</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Status:</strong>
+                            <% if (chamado.status === 'Aberto') { %>
+                                <span class="badge bg-danger">Aberto</span>
+                            <% } else if (chamado.status === 'Em Andamento') { %>
+                                <span class="badge bg-warning text-dark">Em Andamento</span>
+                            <% } else if (chamado.status === 'Aguardando Cliente') { %>
+                                <span class="badge bg-info text-dark">Aguardando Cliente</span>
+                            <% } else if (chamado.status === 'Resolvido') { %>
+                                <span class="badge bg-success">Resolvido</span>
+                            <% } else { %>
+                                <span class="badge bg-secondary">Cancelado</span>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Prioridade:</strong>
+                            <% if (chamado.prioridade === 'Urgente') { %>
+                                <span class="badge bg-danger">Urgente</span>
+                            <% } else if (chamado.prioridade === 'Alta') { %>
+                                <span class="badge bg-warning text-dark">Alta</span>
+                            <% } else if (chamado.prioridade === 'Média') { %>
+                                <span class="badge bg-info text-dark">Média</span>
+                            <% } else { %>
+                                <span class="badge bg-success">Baixa</span>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Tipo:</strong>
+                            <span><%= chamado.tipo %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Data de Abertura:</strong>
+                            <span><%= chamado.data_abertura.toLocaleString('pt-BR') %></span>
+                        </div>
+                    </div>
+                    
+                    <% if (chamado.data_fechamento) { %>
+                        <div class="col-md-12 mb-3">
+                            <div class="d-flex justify-content-between">
+                                <strong>Data de Fechamento:</strong>
+                                <span><%= chamado.data_fechamento.toLocaleString('pt-BR') %></span>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Técnico Responsável:</strong>
+                            <span><%= chamado.tecnico_responsavel || 'Não atribuído' %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Informações do Cliente</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Nome:</strong>
+                            <span><%= chamado.cliente_chamado.nome %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Condomínio:</strong>
+                            <span><%= chamado.cliente_chamado.condominio_cliente.nome %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Endereço:</strong>
+                            <span>Bloco <%= chamado.cliente_chamado.bloco %>, Apt <%= chamado.cliente_chamado.apartamento %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Telefone:</strong>
+                            <span><%= chamado.cliente_chamado.telefone %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Email:</strong>
+                            <span><%= chamado.cliente_chamado.email %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Descrição do Problema</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-0"><%= chamado.descricao %></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% if (chamado.solucao) { %>
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Solução</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0"><%= chamado.solucao %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+<% } %>
+
+<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+    <a href="/chamados/editar/<%= chamado.id %>" class="btn btn-primary">
+        <i class="fas fa-edit me-1"></i>Editar Chamado
+    </a>
+    <form action="/chamados/excluir/<%= chamado.id %>" method="POST" class="d-inline">
+        <button type="submit" class="btn btn-danger btn-delete">
+            <i class="fas fa-trash me-1"></i>Excluir Chamado
+        </button>
+    </form>
+</div>

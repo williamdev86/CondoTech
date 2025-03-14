@@ -1,0 +1,130 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Editar Condomínio</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="/condominios" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Informações do Condomínio</h5>
+    </div>
+    <div class="card-body">
+        <form action="/condominios/atualizar/<%= condominio.id %>" method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nome" class="form-label">Nome do Condomínio*</label>
+                    <input type="text" class="form-control" id="nome" name="nome" value="<%= condominio.nome %>" required>
+                </div>
+                
+                <div class="col-md-8 mb-3">
+                    <label for="endereco" class="form-label">Endereço*</label>
+                    <input type="text" class="form-control" id="endereco" name="endereco" value="<%= condominio.endereco %>" required>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label for="cep" class="form-label">CEP*</label>
+                    <input type="text" class="form-control" id="cep" name="cep" value="<%= condominio.cep %>" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="cidade" class="form-label">Cidade*</label>
+                    <input type="text" class="form-control" id="cidade" name="cidade" value="<%= condominio.cidade %>" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="estado" class="form-label">Estado*</label>
+                    <select class="form-select" id="estado" name="estado" required>
+                        <option value="">Selecione</option>
+                        <option value="AC" <%= condominio.estado === 'AC' ? 'selected' : '' %>>Acre</option>
+                        <option value="AL" <%= condominio.estado === 'AL' ? 'selected' : '' %>>Alagoas</option>
+                        <option value="AP" <%= condominio.estado === 'AP' ? 'selected' : '' %>>Amapá</option>
+                        <option value="AM" <%= condominio.estado === 'AM' ? 'selected' : '' %>>Amazonas</option>
+                        <option value="BA" <%= condominio.estado === 'BA' ? 'selected' : '' %>>Bahia</option>
+                        <option value="CE" <%= condominio.estado === 'CE' ? 'selected' : '' %>>Ceará</option>
+                        <option value="DF" <%= condominio.estado === 'DF' ? 'selected' : '' %>>Distrito Federal</option>
+                        <option value="ES" <%= condominio.estado === 'ES' ? 'selected' : '' %>>Espírito Santo</option>
+                        <option value="GO" <%= condominio.estado === 'GO' ? 'selected' : '' %>>Goiás</option>
+                        <option value="MA" <%= condominio.estado === 'MA' ? 'selected' : '' %>>Maranhão</option>
+                        <option value="MT" <%= condominio.estado === 'MT' ? 'selected' : '' %>>Mato Grosso</option>
+                        <option value="MS" <%= condominio.estado === 'MS' ? 'selected' : '' %>>Mato Grosso do Sul</option>
+                        <option value="MG" <%= condominio.estado === 'MG' ? 'selected' : '' %>>Minas Gerais</option>
+                        <option value="PA" <%= condominio.estado === 'PA' ? 'selected' : '' %>>Pará</option>
+                        <option value="PB" <%= condominio.estado === 'PB' ? 'selected' : '' %>>Paraíba</option>
+                        <option value="PR" <%= condominio.estado === 'PR' ? 'selected' : '' %>>Paraná</option>
+                        <option value="PE" <%= condominio.estado === 'PE' ? 'selected' : '' %>>Pernambuco</option>
+                        <option value="PI" <%= condominio.estado === 'PI' ? 'selected' : '' %>>Piauí</option>
+                        <option value="RJ" <%= condominio.estado === 'RJ' ? 'selected' : '' %>>Rio de Janeiro</option>
+                        <option value="RN" <%= condominio.estado === 'RN' ? 'selected' : '' %>>Rio Grande do Norte</option>
+                        <option value="RS" <%= condominio.estado === 'RS' ? 'selected' : '' %>>Rio Grande do Sul</option>
+                        <option value="RO" <%= condominio.estado === 'RO' ? 'selected' : '' %>>Rondônia</option>
+                        <option value="RR" <%= condominio.estado === 'RR' ? 'selected' : '' %>>Roraima</option>
+                        <option value="SC" <%= condominio.estado === 'SC' ? 'selected' : '' %>>Santa Catarina</option>
+                        <option value="SP" <%= condominio.estado === 'SP' ? 'selected' : '' %>>São Paulo</option>
+                        <option value="SE" <%= condominio.estado === 'SE' ? 'selected' : '' %>>Sergipe</option>
+                        <option value="TO" <%= condominio.estado === 'TO' ? 'selected' : '' %>>Tocantins</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="quantidade_apartamentos" class="form-label">Quant. de Apartamentos</label>
+                    <input type="number" class="form-control" id="quantidade_apartamentos" name="quantidade_apartamentos" min="1" value="<%= condominio.quantidade_apartamentos || '' %>">
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="quantidade_blocos" class="form-label">Quant. de Blocos</label>
+                    <input type="number" class="form-control" id="quantidade_blocos" name="quantidade_blocos" min="1" value="<%= condominio.quantidade_blocos || '' %>">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="sindico" class="form-label">Nome do Síndico*</label>
+                    <input type="text" class="form-control" id="sindico" name="sindico" value="<%= condominio.sindico %>" required>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="telefone" class="form-label">Telefone do Condomínio*</label>
+                    <input type="text" class="form-control" id="telefone" name="telefone" value="<%= condominio.telefone %>" required>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="email" class="form-label">Email*</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<%= condominio.email %>" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="zelador" class="form-label">Nome do Zelador</label>
+                    <input type="text" class="form-control" id="zelador" name="zelador" value="<%= condominio.zelador || '' %>">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="telefone_zelador" class="form-label">Telefone do Zelador</label>
+                    <input type="text" class="form-control" id="telefone_zelador" name="telefone_zelador" value="<%= condominio.telefone_zelador || '' %>">
+                </div>
+                
+                <div class="col-md-12 mb-3">
+                    <label for="observacoes" class="form-label">Observações</label>
+                    <textarea class="form-control" id="observacoes" name="observacoes" rows="3"><%= condominio.observacoes || '' %></textarea>
+                </div>
+                
+                <div class="col-md-12 mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="Ativo" <%= condominio.status === 'Ativo' ? 'selected' : '' %>>Ativo</option>
+                        <option value="Prospecto" <%= condominio.status === 'Prospecto' ? 'selected' : '' %>>Prospecto</option>
+                        <option value="Inativo" <%= condominio.status === 'Inativo' ? 'selected' : '' %>>Inativo</option>
+                        <option value="Abre Portas" <%= condominio.status === 'Abre Portas' ? 'selected' : '' %>>Abre Portas</option>
+                        <option value="Implementação" <%= condominio.status === 'Implementação' ? 'selected' : '' %>>Implementação</option>
+                        <option value="Agendado Visita" <%= condominio.status === 'Agendado Visita' ? 'selected' : '' %>>Agendado Visita</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/condominios" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</div>

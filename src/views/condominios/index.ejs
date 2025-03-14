@@ -1,0 +1,79 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Gerenciamento de Condomínios</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="/condominios/cadastro" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-plus-circle me-1"></i>Novo Condomínio
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Lista de Condomínios</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Endereço</th>
+                        <th>Cidade/UF</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Síndico</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (condominios && condominios.length > 0) { %>
+                        <% condominios.forEach(condominio => { %>
+                            <tr>
+                                <td><%= condominio.id %></td>
+                                <td><%= condominio.nome %></td>
+                                <td><%= condominio.endereco %></td>
+                                <td><%= condominio.cidade %>/<%= condominio.estado %></td>
+                                <td><%= condominio.telefone %></td>
+                                <td><%= condominio.email %></td>
+                                <td><%= condominio.sindico %></td>
+                                <td>
+                                    <% if (condominio.status === 'Ativo') { %>
+                                        <span class="badge bg-success">Ativo</span>
+                                    <% } else if (condominio.status === 'Prospecto') { %>
+                                        <span class="badge bg-warning text-dark">Prospecto</span>
+                                    <% } else if (condominio.status === 'Implementação') { %>
+                                        <span class="badge bg-info text-dark">Implementação</span>
+                                    <% } else if (condominio.status === 'Abre Portas') { %>
+                                        <span class="badge bg-primary">Abre Portas</span>
+                                    <% } else if (condominio.status === 'Agendado Visita') { %>
+                                        <span class="badge bg-secondary">Agendado Visita</span>
+                                    <% } else { %>
+                                        <span class="badge bg-danger">Inativo</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/condominios/editar/<%= condominio.id %>" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="/condominios/excluir/<%= condominio.id %>" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="9" class="text-center">Nenhum condomínio cadastrado</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,130 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Cadastro de Condomínio</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="/condominios" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Informações do Condomínio</h5>
+    </div>
+    <div class="card-body">
+        <form action="/condominios/cadastrar" method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nome" class="form-label">Nome do Condomínio*</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required>
+                </div>
+                
+                <div class="col-md-8 mb-3">
+                    <label for="endereco" class="form-label">Endereço*</label>
+                    <input type="text" class="form-control" id="endereco" name="endereco" required>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label for="cep" class="form-label">CEP*</label>
+                    <input type="text" class="form-control" id="cep" name="cep" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="cidade" class="form-label">Cidade*</label>
+                    <input type="text" class="form-control" id="cidade" name="cidade" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="estado" class="form-label">Estado*</label>
+                    <select class="form-select" id="estado" name="estado" required>
+                        <option value="">Selecione</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="quantidade_apartamentos" class="form-label">Quant. de Apartamentos</label>
+                    <input type="number" class="form-control" id="quantidade_apartamentos" name="quantidade_apartamentos" min="1">
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="quantidade_blocos" class="form-label">Quant. de Blocos</label>
+                    <input type="number" class="form-control" id="quantidade_blocos" name="quantidade_blocos" min="1">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="sindico" class="form-label">Nome do Síndico*</label>
+                    <input type="text" class="form-control" id="sindico" name="sindico" required>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="telefone" class="form-label">Telefone do Condomínio*</label>
+                    <input type="text" class="form-control" id="telefone" name="telefone" required>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="email" class="form-label">Email*</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="zelador" class="form-label">Nome do Zelador</label>
+                    <input type="text" class="form-control" id="zelador" name="zelador">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="telefone_zelador" class="form-label">Telefone do Zelador</label>
+                    <input type="text" class="form-control" id="telefone_zelador" name="telefone_zelador">
+                </div>
+                
+                <div class="col-md-12 mb-3">
+                    <label for="observacoes" class="form-label">Observações</label>
+                    <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
+                </div>
+                
+                <div class="col-md-12 mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="Ativo" selected>Ativo</option>
+                        <option value="Prospecto">Prospecto</option>
+                        <option value="Inativo">Inativo</option>
+                        <option value="Abre Portas">Abre Portas</option>
+                        <option value="Implementação">Implementação</option>
+                        <option value="Agendado Visita">Agendado Visita</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="reset" class="btn btn-outline-secondary">Limpar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+</div>

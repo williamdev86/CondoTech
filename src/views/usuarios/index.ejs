@@ -1,0 +1,113 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Gestão de Usuários</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <a href="/usuarios/cadastro" class="btn btn-sm btn-outline-primary">
+        <i class="fas fa-user-plus me-1"></i>Novo Usuário
+      </a>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Lista de Usuários</h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Nível</th>
+              <th>Condomínio</th>
+              <th>Cliente</th>
+              <th>Status</th>
+              <th>Último Acesso</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (usuarios && usuarios.length > 0) { %>
+              <% usuarios.forEach(usuario => { %>
+                <tr>
+                  <td><%= usuario.id %></td>
+                  <td><%= usuario.nome %></td>
+                  <td><%= usuario.email %></td>
+                  <td>
+                    <% if (usuario.nivel === 'Admin') { %>
+                      <span class="badge bg-danger">Administrador</span>
+                    <% } else if (usuario.nivel === 'Sindico') { %>
+                      <span class="badge bg-warning text-dark">Síndico</span>
+                    <% } else { %>
+                      <span class="badge bg-info text-dark">Cliente</span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <%= usuario.condominio_usuario ? usuario.condominio_usuario.nome : '-' %>
+                  </td>
+                  <td>
+                    <%= usuario.cliente_usuario ? usuario.cliente_usuario.nome : '-' %>
+                  </td>
+                  <td>
+                    <% if (usuario.ativo) { %>
+                      <span class="badge bg-success">Ativo</span>
+                    <% } else { %>
+                      <span class="badge bg-danger">Inativo</span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <%= usuario.ultimo_acesso ? new Date(usuario.ultimo_acesso).toLocaleString('pt-BR') : 'Nunca acessou' %>
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <!-- Link direto para editar -->
+                      <a href="/usuarios/editar/<%= usuario.id %>" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      
+                      <!-- Botão de alternar status com formulário oculto -->
+                      <a href="javascript:void(0)" class="btn btn-sm btn-outline-<%= usuario.ativo ? 'warning' : 'success' %>" 
+                         onclick="submitForm('form-status-<%= usuario.id %>')">
+                        <i class="fas fa-<%= usuario.ativo ? 'ban' : 'check' %>"></i>
+                      </a>
+                      <form id="form-status-<%= usuario.id %>" action="/usuarios/alternar-status/<%= usuario.id %>" method="POST" style="display: none;"></form>
+                      
+                      <% if (usuario.id !== usuarioLogado.id) { %>
+                        <!-- Botão de excluir com formulário oculto -->
+                        <a href="javascript:void(0)" class="btn btn-sm btn-outline-danger" 
+                           onclick="confirmDelete('form-delete-<%= usuario.id %>')">
+                          <i class="fas fa-trash"></i>
+                        </a>
+                        <form id="form-delete-<%= usuario.id %>" action="/usuarios/excluir/<%= usuario.id %>" method="POST" style="display: none;"></form>
+                      <% } %>
+                    </div>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="9" class="text-center">Nenhum usuário cadastrado</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Função para enviar um formulário pelo ID
+    function submitForm(formId) {
+      console.log('Enviando formulário:', formId);
+      document.getElementById(formId).submit();
+    }
+    
+    // Função para confirmar exclusão e enviar formulário
+    function confirmDelete(formId) {
+      if (confirm('Tem certeza que deseja excluir este usuário?')) {
+        console.log('Confirmado. Enviando formulário:', formId);
+        document.getElementById(formId).submit();
+      }
+    }
+  </script>

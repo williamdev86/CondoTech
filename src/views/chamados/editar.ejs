@@ -1,0 +1,140 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Editar Chamado #<%= chamado.id %></h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="/chamados" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Informações do Chamado</h5>
+    </div>
+    <div class="card-body">
+        <form action="/chamados/atualizar/<%= chamado.id %>" method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="condominio_id" class="form-label">Condomínio*</label>
+                    <select class="form-select" id="condominio_id">
+                        <option value="">Selecione um condomínio</option>
+                        <% if (condominios && condominios.length > 0) { %>
+                            <% condominios.forEach(condominio => { %>
+                                <option value="<%= condominio.id %>" <%= chamado.cliente_chamado.condominio_id === condominio.id ? 'selected' : '' %>><%= condominio.nome %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="cliente_id" class="form-label">Cliente*</label>
+                    <select class="form-select" id="cliente_id" name="cliente_id" required>
+                        <% if (clientes && clientes.length > 0) { %>
+                            <% clientes.forEach(cliente => { %>
+                                <option value="<%= cliente.id %>" <%= chamado.cliente_id === cliente.id ? 'selected' : '' %>><%= cliente.nome %> - Bloco <%= cliente.bloco %>, Apt <%= cliente.apartamento %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="<%= chamado.cliente_id %>" selected><%= chamado.cliente_chamado.nome %> - Bloco <%= chamado.cliente_chamado.bloco %>, Apt <%= chamado.cliente_chamado.apartamento %></option>
+                        <% } %>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="tipo" class="form-label">Tipo de Problema*</label>
+                    <select class="form-select" id="tipo" name="tipo" required>
+                        <option value="Internet Lenta" <%= chamado.tipo === 'Internet Lenta' ? 'selected' : '' %>>Internet Lenta</option>
+                        <option value="Sem Conexão" <%= chamado.tipo === 'Sem Conexão' ? 'selected' : '' %>>Sem Conexão</option>
+                        <option value="Instabilidade" <%= chamado.tipo === 'Instabilidade' ? 'selected' : '' %>>Instabilidade</option>
+                        <option value="Instalação" <%= chamado.tipo === 'Instalação' ? 'selected' : '' %>>Instalação</option>
+                        <option value="Mudança de Endereço" <%= chamado.tipo === 'Mudança de Endereço' ? 'selected' : '' %>>Mudança de Endereço</option>
+                        <option value="Outro" <%= chamado.tipo === 'Outro' ? 'selected' : '' %>>Outro</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="prioridade" class="form-label">Prioridade*</label>
+                    <select class="form-select" id="prioridade" name="prioridade" required>
+                        <option value="Baixa" <%= chamado.prioridade === 'Baixa' ? 'selected' : '' %>>Baixa</option>
+                        <option value="Média" <%= chamado.prioridade === 'Média' ? 'selected' : '' %>>Média</option>
+                        <option value="Alta" <%= chamado.prioridade === 'Alta' ? 'selected' : '' %>>Alta</option>
+                        <option value="Urgente" <%= chamado.prioridade === 'Urgente' ? 'selected' : '' %>>Urgente</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="status" class="form-label">Status*</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="Aberto" <%= chamado.status === 'Aberto' ? 'selected' : '' %>>Aberto</option>
+                        <option value="Em Andamento" <%= chamado.status === 'Em Andamento' ? 'selected' : '' %>>Em Andamento</option>
+                        <option value="Aguardando Cliente" <%= chamado.status === 'Aguardando Cliente' ? 'selected' : '' %>>Aguardando Cliente</option>
+                        <option value="Resolvido" <%= chamado.status === 'Resolvido' ? 'selected' : '' %>>Resolvido</option>
+                        <option value="Cancelado" <%= chamado.status === 'Cancelado' ? 'selected' : '' %>>Cancelado</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="tecnico_responsavel" class="form-label">Técnico Responsável</label>
+                    <input type="text" class="form-control" id="tecnico_responsavel" name="tecnico_responsavel" value="<%= chamado.tecnico_responsavel || '' %>">
+                </div>
+                
+                <div class="col-md-12 mb-3">
+                    <label for="descricao" class="form-label">Descrição do Problema*</label>
+                    <textarea class="form-control" id="descricao" name="descricao" rows="4" required><%= chamado.descricao %></textarea>
+                </div>
+                
+                <div class="col-md-12 mb-3">
+                    <label for="solucao" class="form-label">Solução</label>
+                    <textarea class="form-control" id="solucao" name="solucao" rows="4"><%= chamado.solucao || '' %></textarea>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Data de Abertura</label>
+                    <input type="text" class="form-control" value="<%= chamado.data_abertura.toLocaleString('pt-BR') %>" readonly>
+                </div>
+                
+                <% if (chamado.data_fechamento) { %>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data de Fechamento</label>
+                        <input type="text" class="form-control" value="<%= chamado.data_fechamento.toLocaleString('pt-BR') %>" readonly>
+                    </div>
+                <% } %>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/chamados" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Carregar clientes quando o condomínio for selecionado
+        $('#condominio_id').on('change', function() {
+            const condominioId = $(this).val();
+            if (condominioId) {
+                $.ajax({
+                    url: `/clientes/por-condominio/${condominioId}`,
+                    method: 'GET',
+                    success: function(clientes) {
+                        const clienteSelect = $('#cliente_id');
+                        clienteSelect.empty();
+                        clienteSelect.append('<option value="">Selecione um cliente</option>');
+                        
+                        clientes.forEach(cliente => {
+                            clienteSelect.append(`<option value="${cliente.id}">${cliente.nome} - Bloco ${cliente.bloco}, Apt ${cliente.apartamento}</option>`);
+                        });
+                    },
+                    error: function(error) {
+                        console.error('Erro ao carregar clientes:', error);
+                        alert('Erro ao carregar clientes. Por favor, tente novamente.');
+                    }
+                });
+            } else {
+                $('#cliente_id').empty();
+                $('#cliente_id').append('<option value="">Selecione primeiro o condomínio</option>');
+            }
+        });
+    });
+</script>
