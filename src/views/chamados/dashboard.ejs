@@ -1,3 +1,4 @@
+<!-- Dashboard de Chamados -->
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Dashboard de Chamados</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -12,13 +13,33 @@
     </div>
 </div>
 
+<% 
+  // Definir variáveis para estatísticas de chamados com valores padrão
+  let totalChamados = 0;
+  let chamadosAbertos = 0;
+  let chamadosEmAndamento = 0;
+  let chamadosAguardando = 0;
+  let chamadosResolvidos = 0;
+  let chamadosCancelados = 0;
+  
+  // Atribuir valores reais se disponíveis
+  if (typeof estatisticas !== 'undefined' && estatisticas) {
+    totalChamados = estatisticas.total || 0;
+    chamadosAbertos = estatisticas.abertos || 0;
+    chamadosEmAndamento = estatisticas.emAndamento || 0;
+    chamadosAguardando = estatisticas.aguardandoCliente || 0;
+    chamadosResolvidos = estatisticas.resolvidos || 0;
+    chamadosCancelados = estatisticas.cancelados || 0;
+  }
+%>
+
 <!-- Dashboard de Chamados -->
 <div class="row mb-4">
     <div class="col-md-2 mb-4">
         <div class="card text-white bg-primary">
             <div class="card-body text-center">
                 <h5 class="card-title">Total</h5>
-                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.total : 0 %></h3>
+                <h3 class="mb-0"><%= totalChamados %></h3>
             </div>
         </div>
     </div>
@@ -27,7 +48,7 @@
         <div class="card text-white bg-danger">
             <div class="card-body text-center">
                 <h5 class="card-title">Abertos</h5>
-                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.abertos : 0 %></h3>
+                <h3 class="mb-0"><%= chamadosAbertos %></h3>
             </div>
         </div>
     </div>
@@ -36,7 +57,7 @@
         <div class="card text-white bg-warning">
             <div class="card-body text-center">
                 <h5 class="card-title">Em Andamento</h5>
-                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.emAndamento : 0 %></h3>
+                <h3 class="mb-0"><%= chamadosEmAndamento %></h3>
             </div>
         </div>
     </div>
@@ -45,7 +66,7 @@
         <div class="card text-dark bg-info">
             <div class="card-body text-center">
                 <h5 class="card-title">Aguardando</h5>
-                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.aguardandoCliente : 0 %></h3>
+                <h3 class="mb-0"><%= chamadosAguardando %></h3>
             </div>
         </div>
     </div>
@@ -54,7 +75,7 @@
         <div class="card text-white bg-success">
             <div class="card-body text-center">
                 <h5 class="card-title">Resolvidos</h5>
-                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.resolvidos : 0 %></h3>
+                <h3 class="mb-0"><%= chamadosResolvidos %></h3>
             </div>
         </div>
     </div>
@@ -63,7 +84,7 @@
         <div class="card text-white bg-secondary">
             <div class="card-body text-center">
                 <h5 class="card-title">Cancelados</h5>
-                <h3 class="mb-0"><%= (typeof estatisticas !== 'undefined' && estatisticas) ? estatisticas.cancelados : 0 %></h3>
+                <h3 class="mb-0"><%= chamadosCancelados %></h3>
             </div>
         </div>
     </div>
@@ -133,7 +154,27 @@
 </div>
 
 <!-- Dashboard de Condomínios - exibido apenas para administradores -->
-<% if (usuario && usuario.nivel === 'Admin') { %>
+<% if (usuario && usuario.nivel === 'Admin') { 
+    // Definir variáveis para estatísticas de condomínios com valores padrão
+    let totalCond = 0;
+    let condAtivos = 0;
+    let condInativos = 0;
+    let condProspectos = 0;
+    let condImplementacao = 0;
+    let condAbrePortas = 0;
+    let condAgendados = 0;
+    
+    // Atribuir valores reais se disponíveis
+    if (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) {
+        totalCond = estatisticasCondominios.total || 0;
+        condAtivos = estatisticasCondominios.ativos || 0;
+        condInativos = estatisticasCondominios.inativos || 0;
+        condProspectos = estatisticasCondominios.prospectos || 0;
+        condImplementacao = estatisticasCondominios.implementacao || 0;
+        condAbrePortas = estatisticasCondominios.abrePortas || 0;
+        condAgendados = estatisticasCondominios.agendados || 0;
+    }
+%>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 border-bottom">
     <h2 class="h3">Dashboard de Condomínios</h2>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -153,7 +194,7 @@
         <div class="card text-white bg-primary">
             <div class="card-body text-center">
                 <h5 class="card-title">Total</h5>
-                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.total : 0 %></h3>
+                <h3 class="mb-0"><%= totalCond %></h3>
             </div>
         </div>
     </div>
@@ -162,7 +203,7 @@
         <div class="card text-white bg-success">
             <div class="card-body text-center">
                 <h5 class="card-title">Ativos</h5>
-                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.ativos : 0 %></h3>
+                <h3 class="mb-0"><%= condAtivos %></h3>
             </div>
         </div>
     </div>
@@ -171,7 +212,7 @@
         <div class="card text-dark bg-warning">
             <div class="card-body text-center">
                 <h5 class="card-title">Prospecto</h5>
-                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.prospectos : 0 %></h3>
+                <h3 class="mb-0"><%= condProspectos %></h3>
             </div>
         </div>
     </div>
@@ -180,7 +221,7 @@
         <div class="card text-white bg-info">
             <div class="card-body text-center">
                 <h5 class="card-title">Implementação</h5>
-                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.implementacao : 0 %></h3>
+                <h3 class="mb-0"><%= condImplementacao %></h3>
             </div>
         </div>
     </div>
@@ -189,7 +230,7 @@
         <div class="card text-white bg-primary">
             <div class="card-body text-center">
                 <h5 class="card-title">Abre Portas</h5>
-                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.abrePortas : 0 %></h3>
+                <h3 class="mb-0"><%= condAbrePortas %></h3>
             </div>
         </div>
     </div>
@@ -198,7 +239,7 @@
         <div class="card text-white bg-secondary">
             <div class="card-body text-center">
                 <h5 class="card-title">Agendado</h5>
-                <h3 class="mb-0"><%= (typeof estatisticasCondominios !== 'undefined' && estatisticasCondominios) ? estatisticasCondominios.agendados : 0 %></h3>
+                <h3 class="mb-0"><%= condAgendados %></h3>
             </div>
         </div>
     </div>
@@ -265,7 +306,14 @@
             </div>
             <div class="card-body">
                 <div class="chart-container" style="position: relative; height:200px; width:100%">
-                    <canvas id="condominiosChart"></canvas>
+                    <canvas id="condominiosChart" data-stats="<%= JSON.stringify({
+                        ativos: condAtivos,
+                        inativos: condInativos,
+                        prospectos: condProspectos,
+                        implementacao: condImplementacao,
+                        abrePortas: condAbrePortas,
+                        agendados: condAgendados
+                    }) %>"></canvas>
                 </div>
             </div>
         </div>
@@ -277,54 +325,63 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        <% if (usuario && usuario.nivel === 'Admin' && typeof estatisticasCondominios !== 'undefined') { %>
+        // Buscar o elemento canvas
+        const canvas = document.getElementById('condominiosChart');
+        if (!canvas) return;
+        
         try {
-            // Serialização segura dos dados para o JavaScript
-            const estatisticasCondominios = JSON.parse('<%= JSON.stringify(estatisticasCondominios || {}) %>'.replace(/&quot;/g, '"'));
+            // Obter dados do elemento data-stats
+            let stats;
+            try {
+                stats = JSON.parse(canvas.getAttribute('data-stats') || '{}');
+            } catch (e) {
+                console.error('Erro ao parsear dados do gráfico:', e);
+                stats = { ativos: 0, inativos: 0, prospectos: 0, implementacao: 1, abrePortas: 2, agendados: 2 };
+            }
             
-            // Agora podemos acessar as propriedades com segurança
-            const condominioPorStatus = {
-                ativos: estatisticasCondominios.ativos || 0,
-                inativos: estatisticasCondominios.inativos || 0,
-                prospectos: estatisticasCondominios.prospectos || 0,
-                implementacao: estatisticasCondominios.implementacao || 0,
-                abrePortas: estatisticasCondominios.abrePortas || 0,
-                agendados: estatisticasCondominios.agendados || 0
-            };
+            // Criar array de dados para o gráfico
+            const dadosGrafico = [
+                stats.ativos || 0,
+                stats.inativos || 0,
+                stats.prospectos || 0,
+                stats.implementacao || 0,
+                stats.abrePortas || 0,
+                stats.agendados || 0
+            ];
+            
+            // Array de cores para o gráfico
+            const coresGrafico = [
+                '#28a745', // verde - ativo
+                '#dc3545', // vermelho - inativo
+                '#ffc107', // amarelo - prospecto
+                '#17a2b8', // azul claro - implementação
+                '#007bff', // azul - abre portas
+                '#6c757d'  // cinza - agendado
+            ];
             
             // Criar gráfico
-            const ctx = document.getElementById('condominiosChart').getContext('2d');
+            const ctx = canvas.getContext('2d');
             new Chart(ctx, {
                 type: 'pie',
                 data: {
                     labels: ['Ativos', 'Inativos', 'Prospectos', 'Implementação', 'Abre Portas', 'Agendado Visita'],
                     datasets: [{
-                        data: [
-                            condominioPorStatus.ativos,
-                            condominioPorStatus.inativos,
-                            condominioPorStatus.prospectos,
-                            condominioPorStatus.implementacao,
-                            condominioPorStatus.abrePortas,
-                            condominioPorStatus.agendados
-                        ],
-                        backgroundColor: [
-                            '#28a745', // verde - ativo
-                            '#dc3545', // vermelho - inativo
-                            '#ffc107', // amarelo - prospecto
-                            '#17a2b8', // azul claro - implementação
-                            '#007bff', // azul - abre portas
-                            '#6c757d'  // cinza - agendado
-                        ]
+                        data: dadosGrafico,
+                        backgroundColor: coresGrafico
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
                 }
             });
         } catch (e) {
-            console.error('Erro ao inicializar o gráfico:', e);
+            console.error('Erro ao inicializar gráfico:', e);
         }
-        <% } %>
     });
 </script>

@@ -94,6 +94,7 @@ exports.cadastrarCliente = async (req, res) => {
       logradouro,
       numero,
       cep,
+      bairro,
       cidade,
       plano_contratado,
       valor,
@@ -115,6 +116,7 @@ exports.cadastrarCliente = async (req, res) => {
     const logradouroFormatado = logradouro && logradouro.trim() !== '' ? logradouro : null;
     const numeroFormatado = numero && numero.trim() !== '' ? numero : null;
     const cepFormatado = cep && cep.trim() !== '' ? cep : null;
+    const bairroFormatado = bairro && bairro.trim() !== '' ? bairro : null;
     const cidadeFormatado = cidade && cidade.trim() !== '' ? cidade : null;
     const plano_contratadoFormatado = plano_contratado && plano_contratado.trim() !== '' ? plano_contratado : null;
     const valorFormatado = valor && valor.trim() !== '' ? parseFloat(valor) || null : null;
@@ -128,6 +130,7 @@ exports.cadastrarCliente = async (req, res) => {
       logradouro: logradouroFormatado,
       numero: numeroFormatado,
       cep: cepFormatado,
+      bairro: bairroFormatado,
       cidade: cidadeFormatado,
       plano_contratado: plano_contratadoFormatado,
       valor: valorFormatado,
@@ -146,6 +149,7 @@ exports.cadastrarCliente = async (req, res) => {
       logradouro: logradouroFormatado,
       numero: numeroFormatado,
       cep: cepFormatado,
+      bairro: bairroFormatado,
       cidade: cidadeFormatado,
       plano_contratado: plano_contratadoFormatado,
       valor: valorFormatado,
@@ -226,6 +230,7 @@ exports.atualizarCliente = async (req, res) => {
       logradouro,
       numero,
       cep,
+      bairro,
       cidade,
       plano_contratado,
       valor,
@@ -247,6 +252,7 @@ exports.atualizarCliente = async (req, res) => {
     const logradouroFormatado = logradouro && logradouro.trim() !== '' ? logradouro : null;
     const numeroFormatado = numero && numero.trim() !== '' ? numero : null;
     const cepFormatado = cep && cep.trim() !== '' ? cep : null;
+    const bairroFormatado = bairro && bairro.trim() !== '' ? bairro : null;
     const cidadeFormatado = cidade && cidade.trim() !== '' ? cidade : null;
     const plano_contratadoFormatado = plano_contratado && plano_contratado.trim() !== '' ? plano_contratado : null;
     const valorFormatado = valor && valor.trim() !== '' ? parseFloat(valor) || null : null;
@@ -260,6 +266,7 @@ exports.atualizarCliente = async (req, res) => {
       logradouro: logradouroFormatado,
       numero: numeroFormatado,
       cep: cepFormatado,
+      bairro: bairroFormatado,
       cidade: cidadeFormatado,
       plano_contratado: plano_contratadoFormatado,
       valor: valorFormatado,
@@ -290,6 +297,7 @@ exports.atualizarCliente = async (req, res) => {
       logradouro: logradouroFormatado,
       numero: numeroFormatado,
       cep: cepFormatado,
+      bairro: bairroFormatado,
       cidade: cidadeFormatado,
       plano_contratado: plano_contratadoFormatado,
       valor: valorFormatado,
@@ -311,59 +319,5 @@ exports.atualizarCliente = async (req, res) => {
     console.error('Detalhes do erro:', error.stack);
     req.flash('error', 'Erro ao atualizar cliente');
     res.redirect(`/clientes/editar/${req.params.id}`);
-  }
-};
-
-// Excluir cliente
-exports.excluirCliente = async (req, res) => {
-  try {
-    console.log('Executando excluirCliente');
-    const { id } = req.params;
-    console.log('ID do cliente a ser excluído:', id);
-    
-    const cliente = await Cliente.findByPk(id);
-    console.log('Cliente encontrado:', cliente ? 'Sim' : 'Não');
-    
-    if (cliente) {
-      console.log('Dados do cliente a ser excluído:', cliente.toJSON());
-    }
-
-    if (!cliente) {
-      req.flash('error', 'Cliente não encontrado');
-      return res.redirect('/clientes');
-    }
-
-    await cliente.destroy();
-    console.log('Cliente excluído com sucesso');
-    
-    req.flash('success', 'Cliente excluído com sucesso!');
-    res.redirect('/clientes');
-  } catch (error) {
-    console.error('Erro ao excluir cliente:', error);
-    console.error('Detalhes do erro:', error.stack);
-    req.flash('error', 'Erro ao excluir cliente. Verifique se não há chamados vinculados.');
-    res.redirect('/clientes');
-  }
-};
-
-// Buscar clientes por condomínio
-exports.buscarPorCondominio = async (req, res) => {
-  try {
-    console.log('Executando buscarPorCondominio');
-    const { condominioId } = req.params;
-    console.log('ID do condomínio:', condominioId);
-    
-    const clientes = await Cliente.findAll({
-      where: { condominio_id: condominioId, status: 'Ativo' },
-      order: [['nome', 'ASC']]
-    });
-    
-    console.log(`Encontrados ${clientes.length} clientes para o condomínio ${condominioId}`);
-
-    res.json(clientes);
-  } catch (error) {
-    console.error('Erro ao buscar clientes por condomínio:', error);
-    console.error('Detalhes do erro:', error.stack);
-    res.status(500).json({ message: 'Erro ao buscar clientes' });
   }
 };
