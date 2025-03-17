@@ -3,6 +3,26 @@ const express = require('express');
 const router = express.Router();
 const clienteController = require('../controllers/clienteController');
 const { autenticar, autorizar } = require('../config/jwt');
+const multer = require('multer');
+
+// Configuração do Multer para upload de arquivos
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // limite de 5MB
+  },
+  fileFilter: (req, file, cb) => {
+    // Aceitar apenas arquivos Excel
+    if (
+      file.mimetype === 'application/vnd.ms-excel' || 
+      file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      cb(null, true);
+    } else {
+      cb(new Error('Apenas arquivos Excel (.xls ou .xlsx) são permitidos'), false);
+    }
+  }
+});
 
 // Verificar quais funções estão disponíveis
 console.log('Funções disponíveis no clienteController:', Object.keys(clienteController));
@@ -77,6 +97,44 @@ if (clienteController.buscarPorCondominio) {
     console.warn('ATENÇÃO: Função buscarPorCondominio não encontrada no clienteController');
     router.get('/por-condominio/:condominioId', (req, res) => {
         res.json([]);
+    });
+}
+
+// Exportar clientes para Excel
+if (clienteController.exportarExcel) {
+    router.get('/exportar-excel', clienteController.exportarExcel);
+} else {
+    console.warn('ATENÇÃO: Função exportarExcel não encontrada no clienteController');
+    router.get('/exportar-excel', (req, res) => {
+        res.send('Exportação para Excel em desenvolvimento');
+    });
+}
+
+// Rotas para importação de planilha
+if (clienteController.exibirFormImportacao) {
+    router.get('/importar', clienteController.exibirFormImportacao);
+} else {
+    console.warn('ATENÇÃO: Função exibirFormImportacao não encontrada no clienteController');
+    router.get('/importar', (req, res) => {
+        res.send('Formulário de importação em desenvolvimento');
+    });
+}
+
+if (clienteController.processarImportacao) {
+    router.post('/processar-importacao', upload.single('arquivo'), clienteController.processarImportacao);
+} else {
+    console.warn('ATENÇÃO: Função processarImportacao não encontrada no clienteController');
+    router.post('/processar-importacao', (req, res) => {
+        res.send('Processamento de importação em desenvolvimento');
+    });
+}
+
+if (clienteController.confirmarImportacao) {
+    router.post('/confirmar-importacao', clienteController.confirmarImportacao);
+} else {
+    console.warn('ATENÇÃO: Função confirmarImportacao não encontrada no clienteController');
+    router.post('/confirmar-importacao', (req, res) => {
+        res.send('Confirmação de importação em desenvolvimento');
     });
 }
 
