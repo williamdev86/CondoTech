@@ -34,9 +34,9 @@ app.set('views', path.join(__dirname, 'src/views'));
 // Middleware para arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware para parsing de requisições
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Middleware para parsing de requisições - COM LIMITES AUMENTADOS
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
 // Configurar sessão

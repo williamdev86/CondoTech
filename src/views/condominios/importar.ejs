@@ -1,0 +1,255 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Importação de Condomínios</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="/condominios" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Upload da Planilha Excel</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            Faça o upload da planilha Excel contendo os dados dos condomínios. A planilha deve conter as seguintes colunas:
+            <ul>
+                <li><strong>Nome do Condomínio</strong> - Nome completo do condomínio</li>
+                <li><strong>Endereço</strong> - Endereço completo do condomínio</li>
+                <li><strong>CEP</strong> - Código postal do condomínio</li>
+                <li><strong>Nome do Zelador</strong> - Nome do zelador (opcional)</li>
+            </ul>
+        </p>
+        <form action="/condominios/processar-importacao" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="arquivo" class="form-label">Arquivo Excel (.xlsx, .xls)</label>
+                <input class="form-control" type="file" id="arquivo" name="arquivo" accept=".xlsx, .xls" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Valores padrão para campos obrigatórios não presentes na planilha:</label>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="cidade_padrao" class="form-label">Cidade*</label>
+                        <input type="text" class="form-control" id="cidade_padrao" name="cidade_padrao" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="estado_padrao" class="form-label">Estado*</label>
+                        <select class="form-select" id="estado_padrao" name="estado_padrao" required>
+                            <option value="">Selecione</option>
+                            <option value="AC">Acre</option>
+                            <option value="AL">Alagoas</option>
+                            <option value="AP">Amapá</option>
+                            <option value="AM">Amazonas</option>
+                            <option value="BA">Bahia</option>
+                            <option value="CE">Ceará</option>
+                            <option value="DF">Distrito Federal</option>
+                            <option value="ES">Espírito Santo</option>
+                            <option value="GO">Goiás</option>
+                            <option value="MA">Maranhão</option>
+                            <option value="MT">Mato Grosso</option>
+                            <option value="MS">Mato Grosso do Sul</option>
+                            <option value="MG">Minas Gerais</option>
+                            <option value="PA">Pará</option>
+                            <option value="PB">Paraíba</option>
+                            <option value="PR">Paraná</option>
+                            <option value="PE">Pernambuco</option>
+                            <option value="PI">Piauí</option>
+                            <option value="RJ">Rio de Janeiro</option>
+                            <option value="RN">Rio Grande do Norte</option>
+                            <option value="RS">Rio Grande do Sul</option>
+                            <option value="RO">Rondônia</option>
+                            <option value="RR">Roraima</option>
+                            <option value="SC">Santa Catarina</option>
+                            <option value="SP">São Paulo</option>
+                            <option value="SE">Sergipe</option>
+                            <option value="TO">Tocantins</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="telefone_padrao" class="form-label">Telefone Padrão*</label>
+                        <input type="text" class="form-control" id="telefone_padrao" name="telefone_padrao" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email_padrao" class="form-label">Email Padrão*</label>
+                        <input type="email" class="form-control" id="email_padrao" name="email_padrao" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="sindico_padrao" class="form-label">Síndico Padrão*</label>
+                        <input type="text" class="form-control" id="sindico_padrao" name="sindico_padrao" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="status_padrao" class="form-label">Status Padrão*</label>
+                        <select class="form-select" id="status_padrao" name="status_padrao" required>
+                            <option value="Ativo">Ativo</option>
+                            <option value="Prospecto">Prospecto</option>
+                            <option value="Inativo">Inativo</option>
+                            <option value="Abre Portas">Abre Portas</option>
+                            <option value="Implementação">Implementação</option>
+                            <option value="Agendado Visita">Agendado Visita</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-file-import me-1"></i>Importar Condomínios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<% if (typeof preview !== 'undefined' && preview.length > 0) { %>
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Pré-visualização dos Dados</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Endereço</th>
+                        <th>CEP</th>
+                        <th>Cidade</th>
+                        <th>Estado</th>
+                        <th>Zelador</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Síndico</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% preview.forEach(item => { %>
+                    <tr>
+                        <td><%= item.nome %></td>
+                        <td><%= item.endereco %></td>
+                        <td><%= item.cep %></td>
+                        <td><%= item.cidade %></td>
+                        <td><%= item.estado %></td>
+                        <td><%= item.zelador || '-' %></td>
+                        <td><%= item.telefone %></td>
+                        <td><%= item.email %></td>
+                        <td><%= item.sindico %></td>
+                        <td><%= item.status %></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+            <form action="/condominios/confirmar-importacao" method="POST">
+                <input type="hidden" name="dados" value="<%= JSON.stringify(preview) %>">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check me-1"></i>Confirmar Importação
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<% if (typeof resultados !== 'undefined' && resultados) { %>
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">Resultados da Importação</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-success">
+            <h5><i class="fas fa-check-circle me-2"></i>Importação Concluída</h5>
+            <p>Foram importados <%= resultados.importados %> condomínios com sucesso.</p>
+            <% if (resultados.erros && resultados.erros.length > 0) { %>
+                <hr>
+                <h6>Erros durante a importação (Total: <%= resultados.erros.length %>):</h6>
+                <ul>
+                    <% resultados.erros.forEach(erro => { %>
+                        <li><%= erro %></li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </div>
+    </div>
+</div>
+<% } %>
+
+// Script para adicionar na página src/views/condominios/importar.ejs
+// Adicionar no final da página, antes do fechamento da tag body
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Validação do arquivo
+    const fileInput = document.getElementById('arquivo');
+    if (fileInput) {
+      fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+          // Validar tipo de arquivo
+          const validExtensions = ['.xlsx', '.xls'];
+          const fileName = file.name.toLowerCase();
+          const isValidExtension = validExtensions.some(ext => fileName.endsWith(ext));
+          
+          if (!isValidExtension) {
+            alert('Por favor, selecione um arquivo Excel válido (.xlsx ou .xls)');
+            this.value = ''; // Limpar o input
+          }
+          
+          // Validar tamanho
+          const maxSize = 5 * 1024 * 1024; // 5MB
+          if (file.size > maxSize) {
+            alert('O arquivo é muito grande. O tamanho máximo permitido é 5MB.');
+            this.value = ''; // Limpar o input
+          }
+        }
+      });
+    }
+    
+    // Máscara para CEP
+    const cepInput = document.getElementById('cep_padrao');
+    if (cepInput) {
+      cepInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 8) value = value.slice(0, 8);
+        if (value.length > 5) {
+          value = value.slice(0, 5) + '-' + value.slice(5);
+        }
+        e.target.value = value;
+      });
+    }
+    
+    // Máscara para telefone
+    const telefoneInput = document.getElementById('telefone_padrao');
+    if (telefoneInput) {
+      telefoneInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 11) value = value.slice(0, 11);
+        
+        if (value.length > 10) {
+          value = '(' + value.slice(0, 2) + ') ' + value.slice(2, 7) + '-' + value.slice(7);
+        } else if (value.length > 6) {
+          value = '(' + value.slice(0, 2) + ') ' + value.slice(2, 6) + '-' + value.slice(6);
+        } else if (value.length > 2) {
+          value = '(' + value.slice(0, 2) + ') ' + value.slice(2);
+        } else if (value.length > 0) {
+          value = '(' + value;
+        }
+        
+        e.target.value = value;
+      });
+    }
+    
+    // Confirmação antes de enviar
+    const importForm = document.querySelector('form[action="/condominios/confirmar-importacao"]');
+    if (importForm) {
+      importForm.addEventListener('submit', function(e) {
+        if (!confirm('Tem certeza que deseja importar esses condomínios?')) {
+          e.preventDefault();
+        }
+      });
+    }
+  });
+</script>
